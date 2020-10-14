@@ -22,7 +22,7 @@ from pdb import set_trace as breakpoint
 _CIFAR_DATASET_DIR = './datasets/CIFAR'
 _IMAGENET_DATASET_DIR = './datasets/IMAGENET/ILSVRC2012'
 _PLACES205_DATASET_DIR = './datasets/Places205'
-
+_CLIPART_DATASET_DIR = './datasets/clipart'
 
 def buildLabelIndex(labels):
     label2inds = {}
@@ -156,6 +156,35 @@ class GenericDataset(data.Dataset):
             self.data = datasets.__dict__[self.dataset_name.upper()](
                 _CIFAR_DATASET_DIR, train=self.split=='train',
                 download=True, transform=self.transform)
+
+        elif self.dataset_name=='clipart':
+                    assert(self.split=='train' or self.split=='val')
+                    self.mean_pix = [0.485, 0.456, 0.406]
+                    self.std_pix = [0.229, 0.224, 0.225]
+
+                    if self.split!='train':
+                        transforms_list = [
+                            transforms.Scale(256),
+                            transforms.CenterCrop(224),
+                            lambda x: np.asarray(x),
+                        ]
+                    else:
+                        if self.random_sized_crop:
+                            transforms_list = [
+                                transforms.RandomSizedCrop(224),
+                                transforms.RandomHorizontalFlip(),
+                                lambda x: np.asarray(x),
+                            ]
+                        else:
+                            transforms_list = [
+                                transforms.Scale(256),
+                                transforms.RandomCrop(224),
+                                transforms.RandomHorizontalFlip(),
+                                lambda x: np.asarray(x),
+                            ]
+                    self.transform = transforms.Compose(transforms_list)
+                    split_data_dir = _CLIPART_DATASET_DIR + '/' + self.split
+                    self.data = datasets.ImageFolder(split_data_dir, self.transform)
         else:
             raise ValueError('Not recognized dataset {0}'.format(dname))
         

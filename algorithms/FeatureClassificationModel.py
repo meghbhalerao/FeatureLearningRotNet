@@ -11,8 +11,10 @@ def accuracy(output, target, topk=(1,)):
     """Computes the precision@k for the specified values of k"""
     maxk = max(topk)
     batch_size = target.size(0)
+    print(output)
 
-    _, pred = output.topk(maxk, 1, True, True)
+    #_, pred = output.topk(maxk, 1, True, True)
+    _, pred = torch.topk(output, 1, True, True)
     pred = pred.t()
     correct = pred.eq(target.view(1, -1).expand_as(pred))
 
@@ -83,6 +85,7 @@ class FeatureClassificationModel(Algorithm):
             for i in range(len(pred_var)):
                 loss_this = self.criterions['loss'](pred_var[i], labels_var)
                 loss_total = loss_this if (loss_total is None) else (loss_total + loss_this)
+                pred_var = pred_var[0]
                 record['prec1_c'+str(1+i)] = accuracy(pred_var[i].data, labels, topk=(1,))[0][0]
                 record['prec5_c'+str(1+i)] = accuracy(pred_var[i].data, labels, topk=(5,))[0][0]
         else:
