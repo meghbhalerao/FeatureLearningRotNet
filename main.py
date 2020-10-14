@@ -33,8 +33,6 @@ data_train_opt = config['data_train_opt']
 data_test_opt = config['data_test_opt']
 num_imgs_per_cat = data_train_opt['num_imgs_per_cat'] if ('num_imgs_per_cat' in data_train_opt) else None
 
-
-
 dataset_train = GenericDataset(
     dataset_name=data_train_opt['dataset_name'],
     split=data_train_opt['split'],

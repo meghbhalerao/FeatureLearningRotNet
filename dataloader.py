@@ -22,7 +22,7 @@ from pdb import set_trace as breakpoint
 _CIFAR_DATASET_DIR = './datasets/CIFAR'
 _IMAGENET_DATASET_DIR = './datasets/IMAGENET/ILSVRC2012'
 _PLACES205_DATASET_DIR = './datasets/Places205'
-_CLIPART_DATASET_DIR = './datasets/clipart'
+_CUSTOM_DATASET_DIR = './datasets/real'
 
 def buildLabelIndex(labels):
     label2inds = {}
@@ -157,7 +157,7 @@ class GenericDataset(data.Dataset):
                 _CIFAR_DATASET_DIR, train=self.split=='train',
                 download=True, transform=self.transform)
 
-        elif self.dataset_name=='clipart':
+        elif self.dataset_name in ('clipart','real','sketch'):
                     assert(self.split=='train' or self.split=='val')
                     self.mean_pix = [0.485, 0.456, 0.406]
                     self.std_pix = [0.229, 0.224, 0.225]
@@ -183,7 +183,7 @@ class GenericDataset(data.Dataset):
                                 lambda x: np.asarray(x),
                             ]
                     self.transform = transforms.Compose(transforms_list)
-                    split_data_dir = _CLIPART_DATASET_DIR + '/' + self.split
+                    split_data_dir = _CUSTOM_DATASET_DIR + '/' + self.split
                     self.data = datasets.ImageFolder(split_data_dir, self.transform)
         else:
             raise ValueError('Not recognized dataset {0}'.format(dname))

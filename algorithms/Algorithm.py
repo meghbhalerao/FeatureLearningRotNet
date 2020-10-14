@@ -261,7 +261,9 @@ class Algorithm():
             train_stats_this = self.train_step(batch)
             train_stats.update(train_stats_this)
             if (idx+1) % disp_step == 0:
-                self.logger.info('==> Iteration [%3d][%4d / %4d]: %s' % (epoch+1, idx+1, len(data_loader), train_stats.average()))
+                #print(len(data_loader))
+                #print(epoch+1, idx+1)#, len(data_loader))
+                self.logger.info('==> Iteration [%3d][%4d / %4d]: %s' % (epoch+1, idx+1, len(data_loader.dataset), train_stats.average()))
 
         return train_stats.average()
 
@@ -269,7 +271,7 @@ class Algorithm():
         self.logger.info('Evaluating: %s' % os.path.basename(self.exp_dir))         
         self.dloader = dloader
         self.dataset_eval = dloader.dataset
-        self.logger.info('==> Dataset: %s [%d images]' % (dloader.dataset.name, len(dloader)))
+        self.logger.info('==> Dataset: %s [%d images]' % (dloader.dataset.name, len(dloader.dataset)))
         for key, network in self.networks.items():
             network.eval()
 

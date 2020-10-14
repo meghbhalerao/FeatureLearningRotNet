@@ -7,7 +7,7 @@ data_train_opt['batch_size'] = batch_size
 data_train_opt['unsupervised'] = False
 data_train_opt['epoch_size'] = None
 data_train_opt['random_sized_crop'] = False
-data_train_opt['dataset_name'] = 'clipart'
+data_train_opt['dataset_name'] = 'real'
 data_train_opt['split'] = 'train'
 
 data_test_opt = {}
